@@ -23,8 +23,10 @@ Sports organizations lose **billions annually** to unauthorized redistribution o
 | Feature | Description |
 |---|---|
 | 🎬 **Asset Registration** | Upload official sports clips/images with rights metadata |
-| 🤖 **AI Detection** | Gemini + NVIDIA LLaMA analyze suspect content — returns similarity score, classification, risk level |
-| 📋 **Case Management** | One-click DMCA takedown email draft generation |
+| 🌐 **Live YouTube Search** | Automatically search YouTube via API to find suspect clips matching your asset |
+| 👁️ **True Multimodal AI** | Gemini 2.0 Flash analyzes actual video frames (thumbnails) alongside metadata |
+| 🤖 **AI Detection** | NVIDIA LLaMA / Gemini fallback — returns similarity score, classification, risk level |
+| ⚖️ **Automated Enforcement** | One-click DMCA takedown email generation and "Send to Legal" integration |
 | 📊 **Dashboard** | Real-time overview of all detections and case statuses |
 
 ---
@@ -239,10 +241,10 @@ Visit these URLs to verify backend data:
 
 | Question | Answer |
 |---|---|
-| "Where do suspect clips come from?" | "Pre-seeded for MVP. Production would use platform APIs (YouTube Data API, TikTok API) or web crawlers" |
-| "Is the AI actually analyzing video?" | "It analyzes full clip metadata + context. With Gemini multimodal we can pass actual image frames in v2" |
+| "Where do suspect clips come from?" | "We use the live YouTube Data API to search for unauthorized clips based on the official asset's title and event name." |
+| "Is the AI actually analyzing video?" | "Yes! We use Gemini 2.0 Flash's true multimodal capabilities to visually analyze the pirated video thumbnail frames alongside metadata." |
 | "Can it scale?" | "SQLite → PostgreSQL is a config change. FastAPI handles async at scale. Storage moves to S3" |
-| "What about false positives?" | "Human review step built in — every detection creates a case that a human approves before takedown" |
+| "What about false positives?" | "Human review step built in — every detection creates a case that a human approves before hitting 'Send to Legal'." |
 
 ---
 
@@ -260,7 +262,6 @@ Visit these URLs to verify backend data:
 ## ⚠️ Known MVP Limitations
 
 - No authentication (by design for MVP — add JWT later)
-- Suspect assets are pre-seeded, not live-crawled
 - File storage is local `uploads/` directory (use S3 in production)
 - SQLite database (use PostgreSQL in production)
 

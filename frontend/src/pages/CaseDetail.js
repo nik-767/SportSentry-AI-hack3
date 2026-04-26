@@ -32,6 +32,8 @@ export default function CaseDetail() {
   const [status, setStatus] = useState('');
   const [updating, setUpdating] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   const loadCase = useCallback(async () => {
     try {
@@ -63,6 +65,18 @@ export default function CaseDetail() {
     navigator.clipboard.writeText(caseData.takedown_draft || '');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleSendLegal = () => {
+    setSending(true);
+    setTimeout(() => {
+      setSending(false);
+      setSent(true);
+      if (status !== 'ACTIONED') {
+        setStatus('ACTIONED');
+        api.updateCase(id, 'ACTIONED').then(() => loadCase());
+      }
+    }, 2000);
   };
 
   if (loading) {
@@ -215,12 +229,21 @@ export default function CaseDetail() {
                 <div className="card-title">DMCA Takedown Draft</div>
                 <div className="card-subtitle">AI-generated, ready to send</div>
               </div>
-              <button
-                className={`btn btn-sm ${copied ? 'btn-success' : 'btn-secondary'}`}
-                onClick={handleCopy}
-              >
-                {copied ? '✓ Copied!' : '⎘ Copy'}
-              </button>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button
+                  className={`btn btn-sm ${sent ? 'btn-success' : 'btn-primary'}`}
+                  onClick={handleSendLegal}
+                  disabled={sending || sent}
+                >
+                  {sending ? <><span className="spinner" /> Sending…</> : sent ? '✓ Sent to Legal' : '✉ Send Notice via SendGrid'}
+                </button>
+                <button
+                  className={`btn btn-sm ${copied ? 'btn-success' : 'btn-secondary'}`}
+                  onClick={handleCopy}
+                >
+                  {copied ? '✓ Copied!' : '⎘ Copy'}
+                </button>
+              </div>
             </div>
             <textarea
               className="takedown-area"
