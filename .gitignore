@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+node_modules/
+build/
+.env
+.DS_Store
+Thumbs.db
+*.log
+.vscode/settings.json
+.firebase/
+firestore-debug.log
