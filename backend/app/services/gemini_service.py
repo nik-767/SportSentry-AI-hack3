@@ -88,6 +88,7 @@ def compare_media_nvidia(
     suspect_uploader: str,
     suspect_url: str,
     suspect_views: int,
+    suspect_thumbnail_url: str = None,
 ) -> Dict[str, Any]:
     url = "https://integrate.api.nvidia.com/v1/chat/completions"
     headers = {
@@ -129,6 +130,7 @@ def compare_media_gemini(
     suspect_uploader: str,
     suspect_url: str,
     suspect_views: int,
+    suspect_thumbnail_url: str = None,
 ) -> Dict[str, Any]:
     model = genai.GenerativeModel("gemini-2.0-flash")
     prompt = COMPARISON_PROMPT_TEMPLATE.format(
@@ -142,7 +144,21 @@ def compare_media_gemini(
         suspect_url=suspect_url or "N/A",
         suspect_views=suspect_views or 0,
     )
-    response = model.generate_content(prompt)
+    
+    contents = [prompt]
+    
+    if suspect_thumbnail_url:
+        try:
+            resp = requests.get(suspect_thumbnail_url, timeout=5)
+            if resp.status_code == 200:
+                contents.append({
+                    "mime_type": "image/jpeg",
+                    "data": resp.content
+                })
+        except Exception as e:
+            print(f"[Gemini] Failed to fetch thumbnail: {e}")
+            
+    response = model.generate_content(contents)
     return _extract_json(response.text)
 
 
@@ -158,6 +174,7 @@ def compare_media(official, suspect) -> Dict[str, Any]:
         suspect_uploader=suspect.uploader,
         suspect_url=suspect.source_url,
         suspect_views=suspect.view_count,
+        suspect_thumbnail_url=suspect.thumbnail_url,
     )
 
     last_error = None
