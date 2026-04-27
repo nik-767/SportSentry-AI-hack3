@@ -1,4 +1,4 @@
-const BASE = 'http://localhost:8000/api';
+const BASE = process.env.REACT_APP_API_URL || 'https://sportsentry-ai-hack3-production.up.railway.app/api';
 
 async function request(path, options = {}) {
   const res = await fetch(`${BASE}${path}`, options);
