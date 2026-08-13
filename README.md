@@ -20,6 +20,7 @@ Sports organizations lose **billions annually** to unauthorized redistribution o
 
 ### Core Features (MVP Phase 1)
 
+
 | Feature | Description |
 |---|---|
 | 🎬 **Asset Registration** | Upload official sports clips/images with rights metadata |
